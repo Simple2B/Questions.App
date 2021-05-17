@@ -15,6 +15,7 @@ class Question(db.Model, ModelMixin):
     asker_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     asker = relationship("User")
     answers = relationship("Answer")
+    is_active = db.Column(db.Boolean, nullable=True, default=False)
 
     def to_json(self):
         answers_list = [a.to_json() for a in self.answers]
