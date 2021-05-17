@@ -1,4 +1,4 @@
-from app.models import User
+from app.models import User, Question
 from config import BaseConfig as conf
 
 
@@ -10,6 +10,20 @@ def fill_db_data():
     anonymous.password = conf.ANONYMOUS_PASS
     anonymous.save()
     if conf.GENERATE_TEST_DATA == "YES":
-        pass
+        question1 = Question()
+        question1.asker_id = 2
+        question1.question_text = "Active question 1"
+        question1.is_active = True
+        question1.save()
+        question2 = Question()
+        question2.asker_id = 2
+        question2.question_text = "Solved question 2"
+        question2.is_active = False
+        question2.save()
+        question3 = Question()
+        question3.asker_id = 2
+        question3.question_text = "Active question 3"
+        question3.is_active = True
+        question3.save()
 
     pass
