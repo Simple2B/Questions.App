@@ -2,6 +2,7 @@ import pytest
 
 from app import db, create_app
 from tests.utils import register, login, logout
+from app.models import User
 
 
 @pytest.fixture
@@ -30,6 +31,8 @@ def test_auth_pages(client):
 
 
 def test_register(client):
+    users = User.query.all()
+    user_num_before = len(users)
     response = client.post(
         "/register",
         data=dict(
@@ -40,7 +43,14 @@ def test_register(client):
         ),
         follow_redirects=True,
     )
+    assert response
+    assert response.status_code == 200
     assert b"Registration successful. You are logged in." in response.data
+    users = User.query.all()
+    assert users
+    assert len(users) == user_num_before + 1
+    last_user = users[-1]
+    assert last_user.username == "sam"
 
 
 def test_login_and_logout(client):
