@@ -1,0 +1,66 @@
+from datetime import datetime
+from enum import Enum
+
+from flask_login import UserMixin, AnonymousUserMixin
+from sqlalchemy import func
+from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import relationship
+from werkzeug.security import generate_password_hash, check_password_hash
+
+from app import db
+from app.models.utils import ModelMixin
+
+
+class User(db.Model, UserMixin, ModelMixin):
+
+    __tablename__ = "users"
+
+    class UserRole(str, Enum):
+        ASKER = "ASKER"
+        ANSWERER = "ANSWERER"
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(60), unique=True, nullable=False)
+    email = db.Column(db.String(255), unique=True, nullable=False)
+    password_hash = db.Column(db.String(255), nullable=False)
+    user_role = db.Column(db.Enum(UserRole), default=UserRole.ANSWERER)
+    answers = relationship("Answer")
+    activated = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.now)
+
+    @hybrid_property
+    def password(self):
+        return self.password_hash
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    @classmethod
+    def authenticate(cls, user_id, password):
+        user = cls.query.filter(
+            db.or_(
+                func.lower(cls.username) == func.lower(user_id),
+                func.lower(cls.email) == func.lower(user_id),
+            )
+        ).first()
+        if user is not None and check_password_hash(user.password, password):
+            return user
+
+    def __repr__(self):
+        return f"<User: {self.username}>"
+
+    def to_json(self):
+        answers_list = [a.to_json() for a in self.answers]
+        return {
+            "id": self.id,
+            "username": self.username,
+            "email": self.email,
+            "user_role": self.user_role,
+            "created_at": datetime.timestamp(self.created_at),
+            "answers_list": answers_list,
+        }
+
+
+class AnonymousUser(AnonymousUserMixin):
+    pass
