@@ -1,4 +1,8 @@
 /* custom css */
 * {
-    border-radius: 0 !important;
+  border-radius: 0 !important;
+}
+
+.content {
+  height: 100vh;
 }
