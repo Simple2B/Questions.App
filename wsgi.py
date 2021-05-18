@@ -2,8 +2,10 @@
 import click
 
 from app import create_app, db, models, forms
+from socket_wrapper import implement_socket_io
 
 app = create_app()
+socketio = implement_socket_io(app)
 
 
 # flask cli context setup
@@ -30,4 +32,5 @@ def drop_db():
 
 
 if __name__ == "__main__":
-    app.run()
+    # app.run()
+    socketio.run(app)

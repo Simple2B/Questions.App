@@ -17,15 +17,12 @@ class BaseConfig(object):
     ADMIN_NAME = os.environ.get("ADMIN_NAME", "admin")
     ADMIN_PASS = os.environ.get("ADMIN_PASS", "admin")
     ADMIN_MAIL = os.environ.get("ADMIN_MAIL", "admin@mail.com")
-    
     ANONYMOUS_NAME = os.environ.get("ANONYMOUS_NAME", "anonymous")
     ANONYMOUS_PASS = os.environ.get("ANONYMOUS_PASS", "anonymous")
     ANONYMOUS_MAIL = os.environ.get("ANONYMOUS_MAIL", "anonymous@mail.com")
 
     USE_ANONYMOUS_USER = os.environ.get("USE_ANONYMOUS_USER", "NO")
     GENERATE_TEST_DATA = os.environ.get("GENERATE_TEST_DATA", "NO")
-
-
 
     @staticmethod
     def configure(app):
