@@ -73,3 +73,25 @@ class QuestionApi(Resource):
             "href": BASE_URL + url_for("api.questionsapi"),
         }
         return resp, 200
+
+
+class UserQuestionApi(Resource):
+    def get(self, user_id):
+        user = User.query.get(user_id)
+        if not user:
+            resp = {"status": "error", "message": "Wrong user ID"}
+            return resp, 400
+        questions = [
+            q.to_json()
+            for q in Question.query.all()
+            if q.is_active is True and q.asker_id == user_id
+        ]
+        if not questions:
+            resp = {"status": "error", "message": "User don't have active questions"}
+            return resp, 400
+        resp = {
+            "status": "success",
+            "message": "Question found",
+            "data": questions,
+        }
+        return resp, 200

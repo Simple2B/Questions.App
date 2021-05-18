@@ -18,7 +18,13 @@ db = SQLAlchemy()
 def create_app(environment="development"):
 
     from config import config
-    from app.views import main_blueprint, auth_blueprint, QuestionsApi, QuestionApi
+    from app.views import (
+        main_blueprint,
+        auth_blueprint,
+        QuestionsApi,
+        QuestionApi,
+        UserQuestionApi,
+    )
     from app.models import (
         User,
         AnonymousUser,
@@ -42,6 +48,7 @@ def create_app(environment="development"):
     # Add API resources.
     api.add_resource(QuestionsApi, "/questions")
     api.add_resource(QuestionApi, "/questions/<int:question_id>")
+    api.add_resource(UserQuestionApi, "/users/<int:user_id>/questions")
 
     # Register blueprints.
     app.register_blueprint(auth_blueprint)
