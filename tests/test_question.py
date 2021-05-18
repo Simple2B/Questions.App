@@ -69,3 +69,94 @@ def test_get_active_questions(client):
         follow_redirects=True,
     )
     assert response.status_code == 200
+
+
+def test_get_non_existent_question(client):
+    response = client.get(
+        "api/v1/questions/999",
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
+    assert response.json["status"] == "error"
+    assert response.json["message"] == "No such question"
+
+
+def test_edit_question_text(client):
+    response = client.get(
+        "api/v1/questions/1",
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
+    assert response.json["data"] == "Active question 1"
+    response = client.put(
+        "api/v1/questions/1",
+        data=dict(
+            question_text="Active question 1 edited",
+        ),
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
+    assert response.json["status"] == "success"
+    assert response.json["message"] == "Question was edited"
+    assert response.json["href"] == "http://127.0.0.1:5000/api/v1/questions"
+
+
+def test_edit_question_without_data(client):
+    response = client.put(
+        "api/v1/questions/1",
+        follow_redirects=True,
+    )
+    assert response.status_code == 400
+    assert response.json["status"] == "error"
+    assert response.json["message"] == "Need to pass request body data!"
+    response = client.put(
+        "api/v1/questions/1",
+        data=dict(
+            question_text="Active question 1 edited",
+        ),
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
+    assert response.json["status"] == "success"
+    assert response.json["message"] == "Question was edited"
+    response = client.put(
+        "api/v1/questions/1",
+        data=dict(
+            is_active=False,
+        ),
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
+    assert response.json["status"] == "success"
+    assert response.json["message"] == "Question was edited"
+
+
+def test_edit_non_existent_question(client):
+    response = client.put(
+        "api/v1/questions/999",
+        data=dict(
+            question_text="Active question 1 edited",
+        ),
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
+    assert response.json["status"] == "error"
+    assert response.json["message"] == "No such question"
+
+
+def test_edit_question_is_active(client):
+    response = client.put(
+        "api/v1/questions/1",
+        data=dict(
+            is_active="False",
+        ),
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
+    response = client.get(
+        "api/v1/questions/1",
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
+    q = Question.query.get(1)
+    assert q.is_active is False
