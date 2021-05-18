@@ -26,6 +26,21 @@ def client():
         app_ctx.pop()
 
 
+def test_question_endpoints(client):
+    response = client.get("api/v1/questions")
+    assert response.status_code == 200
+    response = client.get("api/v1/questions/1")
+    assert response.status_code == 200
+    response = client.post(
+        "api/v1/questions",
+        data=dict(
+            question_text="test question?",
+        ),
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
+
+
 def test_create_question(client):
     questions_before_len = len(Question.query.all())
     response1 = client.post(

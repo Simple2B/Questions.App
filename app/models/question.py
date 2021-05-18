@@ -21,8 +21,8 @@ class Question(db.Model, ModelMixin):
         answers_list = [a.to_json() for a in self.answers]
         return {
             "id": self.id,
-            "question_text": self.answer_text,
-            "asker": self.asker,
+            "question_text": self.question_text,
+            "asker": self.asker.to_json(),
             "created_at": datetime.timestamp(self.created_at),
             "answers_list": answers_list,
         }
