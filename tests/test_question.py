@@ -39,6 +39,22 @@ def test_question_endpoints(client):
         follow_redirects=True,
     )
     assert response.status_code == 200
+    response = client.put(
+        "api/v1/questions/1",
+        data=dict(
+            question_text="edited question?",
+        ),
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
+    response = client.get(
+        "api/v1/users/2/questions",
+        data=dict(
+            question_text="edited question?",
+        ),
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
 
 
 def test_create_question(client):
@@ -160,3 +176,32 @@ def test_edit_question_is_active(client):
     assert response.status_code == 200
     q = Question.query.get(1)
     assert q.is_active is False
+
+
+def test_get_question_by_user_id(client):
+    response = client.get(
+        "api/v1/users/2/questions",
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
+    assert len(response.json["data"]) > 0
+
+
+def test_get_question_by_wrong_user_id(client):
+    response = client.get(
+        "api/v1/users/999/questions",
+        follow_redirects=True,
+    )
+    assert response.status_code == 400
+    assert response.json["status"] == "error"
+    assert response.json["message"] == "Wrong user ID"
+
+
+def test_get_question_by_user_id_empty_question_list(client):
+    response = client.get(
+        "api/v1/users/1/questions",
+        follow_redirects=True,
+    )
+    assert response.status_code == 400
+    assert response.json["status"] == "error"
+    assert response.json["message"] == "User don't have active questions"
