@@ -2,12 +2,18 @@ from flask_socketio import SocketIO, send
 
 
 def implement_socket_io(app):
-    async_mode = None
-    socketio = SocketIO(app, async_mode=async_mode)
+    socketio = SocketIO(app)
 
-    @socketio.on("message")
-    def handleMessage(msg):
-        print("Message: " + msg)
+    @socketio.on("connection")
+    def handleConnection(obj):
+        usr = obj["id"]
+        msg = f"User {usr} has connected"
+        print(msg)
         send(msg, broadcast=True)
+
+    @socketio.on("post_question")
+    def handlePostQuestion(message):
+        print(message)
+        send(message, broadcast=True)
 
     return socketio
