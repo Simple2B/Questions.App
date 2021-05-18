@@ -4,6 +4,7 @@ import os
 from flask import Flask, Blueprint, render_template, scaffold, helpers
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_cors import CORS
 from werkzeug.exceptions import HTTPException
 
 helpers._endpoint_from_view_func = scaffold._endpoint_from_view_func
@@ -27,6 +28,7 @@ def create_app(environment="development"):
     app = Flask(__name__)
     api_blueprint = Blueprint("api", __name__, url_prefix="/api/v1")
     api = Api(api_blueprint)
+    CORS(app)
 
     # Set app config.
     env = os.environ.get("FLASK_ENV", environment)
