@@ -1,0 +1,9 @@
+.answer {
+  width: 600px;
+  font-size: 30px;
+}
+
+.button_block {
+  display: flex;
+  justify-content: space-between;
+}

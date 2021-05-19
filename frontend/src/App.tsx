@@ -1,6 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Socket } from "socket.io-client";
 import { socket } from "./socket";
+import { Asker } from "./components/asker/Asker"
+import { Answerer } from "./components/answerer/Answerer"
+
+const questionsFromServer = [
+  {"id": 1, "header":"Header 1", "question": "rem ipsum dolor sit amet", "time": 15 },
+  {"id": 2, "header":"Header 2", "question": "rem ipsum dolor sit amet", "time": 15 },
+  {"id": 3, "header":"Header 3", "question": "rem ipsum dolor sit amet", "time": 15 },
+  {"id": 4, "header":"Header 4", "question": "rem ipsum dolor sit amet", "time": 15 },
+];
 
 export const App = () => {
   const [socketId, setSocketId] = useState("");
@@ -26,8 +35,12 @@ export const App = () => {
     // });
   });
   return (
+    <>
     <div>
       <button onClick={handleConnect}>Connect</button>{" "}
     </div>
+    <Asker questions={questionsFromServer}/>
+    <Answerer questions={questionsFromServer} />
+    </>
   );
 };
