@@ -17,7 +17,8 @@ export const Answerer = ( {questions}: IAnswererProps<IQuestion> ) => {
         <span>{question.id}</span>
         {". "}
         <a href="#">{question.question}</a>
-        <div className="button_block"><button className="answer_button">Submit answer</button>
+        <div className="button_block">
+          <button className="btn btn_submit btn-success answer_button">Submit answer</button>
         <div>
           <span>{question.time}</span>
           {" seconds ago"}
