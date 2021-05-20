@@ -1,0 +1,36 @@
+.filter {
+  display: flex;
+  justify-content: space-between;
+  font-size: 20px;
+}
+
+.form-select {
+  width: 200px;
+  height: 35px;
+}
+
+.btn_start {
+  margin: 10px 0 20px 440px;
+}
+
+.answer_amount {
+  font-size: 20px;
+}
+.asker {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.asker__form {
+  max-width: 400px;
+  min-width: 310px;
+  margin: 0 auto;
+  padding-top: 150px;
+}
+@media screen and (max-width: 576px) {
+  .asker__form {
+    width: 100%;
+    padding: 5px;
+    margin: 0;
+  }
+}
