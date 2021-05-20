@@ -1,33 +1,81 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
+import { questions_ws } from "./socket";
 import { Socket } from "socket.io-client";
-import { socket } from "./socket";
+import { useBeforeunload } from "./hooks/useExitPrompt";
 
 export const App = () => {
-  const [socketId, setSocketId] = useState("");
+  const [socket, setSocket] = useState<Socket>(questions_ws);
+  const [question, setQuestion] = useState("");
 
-  const handleConnect = () => {
-    setSocketId(socket.id);
-    console.log(socketId);
-    socket.emit("connection", { id: socketId });
+  const handleGetQuestions = () => {
+    socket.emit("get_active_questions");
+  };
+  const handleCreateQuestion = () => {
+    const resp = {
+      session: socket.id,
+      question: question,
+    };
+    if (question) socket.emit("create_question", resp);
   };
 
-  const handleSendQuestion = () => {};
-  const socketRef = useRef<Socket>();
+  useEffect(() => {
+    socket.on("connect", () => {
+      socket.send(`User ${socket.id} has connected`);
+    });
+
+    socket.on("success_active_questions", (resp) => {
+      console.log(resp);
+    });
+
+    socket.on("question_create_success", (resp) => {
+      socket.emit("get_active_questions");
+      console.log(resp);
+    });
+    // return () => {
+
+    //   console.log("before ");
+    //   alert("componentWillUnmount");
+    //   const client_data = {
+    //     session: socket.id,
+    //     message: "disconnected successfully",
+    //   };
+    //   socket.emit("leave_service", client_data);
+    //   socket.disconnect();
+    //   alert("componentWillUnmount");
+    // };
+    // return () => {
+    //   window.removeEventListener("beforeunload", alertUser);
+    // };
+  }, []);
+
+  // useBeforeunload((event) => {
+  //   if (socket) event.preventDefault();
+  // });
+  useBeforeunload((event) => {
+    event.preventDefault();
+  });
 
   useEffect(() => {
-    socketRef.current = socket;
-    socketRef.current.on("message", () => {
-      console.log("message");
-    });
+    window.onbeforeunload = function () {
+      return false;
+    };
+    return () => {};
   }, []);
-  useEffect(() => {
-    // socket.on("connect", () => {
-    //   socket.send("User has connected");
-    // });
-  });
+
   return (
     <div>
-      <button onClick={handleConnect}>Connect</button>{" "}
+      <button onClick={handleGetQuestions}>Get all questions</button> <br />
+      <input
+        type="text"
+        id="question"
+        placeholder="Type in your question"
+        value={question}
+        onChange={(e) => {
+          setQuestion(e.target.value);
+        }}
+      />
+      <br />
+      <button onClick={handleCreateQuestion}>Add question</button>
     </div>
   );
 };
