@@ -9,9 +9,9 @@ def register(username, email="username@test.com", password="password"):
 
 def login(client, username, password="password"):
     return client.post(
-        "/login", data=dict(user_id=username, password=password), follow_redirects=True
+        "/auth/login", data=dict(user_id=username, password=password), follow_redirects=True
     )
 
 
 def logout(client):
-    return client.get("/logout", follow_redirects=True)
+    return client.get("/auth/logout", follow_redirects=True)
