@@ -1,31 +1,28 @@
-import React, { useState } from 'react';
-import './answerer.css'
+import React, { useState } from "react";
+import { IQuestion } from "../../types/questionTypes";
+import "./answerer.css";
 
-interface IQuestion{
-   id: number; header: string; question: string; time: number;
-}
-interface IAnswererProps<T>{
-  questions: Array<T>
+interface IAnswererProps {
+  questions: Array<IQuestion>;
 }
 
-export const Answerer = ( {questions}: IAnswererProps<IQuestion> ) => {
-
-  return (
-    <div className="answer position-absolute top-50 start-50 translate-middle shadow-sm p-3 mb-5 bg-body rounded">
-      {questions.map((question) => (
-        <div className="border-bottom" key={question.id}>
-        <span>{question.id}</span>
-        {". "}
-        <a href="#">{question.question}</a>
-        <div className="button_block">
-          <button className="btn btn_submit btn-success answer_button">Submit answer</button>
+export const Answerer = ({ questions }: IAnswererProps) => {
+  const question_components = questions.map((question) => (
+    <div className="answer__container" key={question.id}>
+      <span>{question.question_text}</span>
+      <div className="button_block">
+        <button className="answer__button">Submit answer</button>
         <div>
-          <span>{question.time}</span>
-          {" seconds ago"}
+          <span>{new Date(question.created_at).toLocaleTimeString()}</span>
         </div>
-        </div>
-        </div>
-      ))}
+      </div>
     </div>
-  )
-}
+  ));
+  return (
+    // <div className="answer translate-middle shadow-sm p-3 mb-5 bg-body rounded">
+    <div className="answer">
+      <p>Answerer window</p>
+      {question_components}
+    </div>
+  );
+};

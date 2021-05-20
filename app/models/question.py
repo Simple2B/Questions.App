@@ -1,4 +1,5 @@
 from datetime import datetime
+import math
 
 from app import db
 from app.models.utils import ModelMixin
@@ -20,10 +21,11 @@ class Question(db.Model, ModelMixin):
 
     def to_json(self):
         answers_list = [a.to_json() for a in self.answers]
+        time = int(math.floor(datetime.timestamp(self.created_at))) * 1000
         return {
             "id": self.id,
             "question_text": self.question_text,
             "session_id": self.session_id,
-            "created_at": datetime.timestamp(self.created_at),
+            "created_at": time,
             "answers_list": answers_list,
         }
