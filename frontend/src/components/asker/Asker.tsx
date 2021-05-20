@@ -1,21 +1,36 @@
 import { Socket } from "socket.io-client";
 import React, { useState } from "react";
+import { questions_ws } from "../../socket";
 import "./asker.css";
+import { IQuestion } from "../../types/questionTypes";
 
 interface IAnswererProps {
-  socket: Socket;
+  questions: IQuestion[];
 }
 
-export const Asker = ({ socket }: IAnswererProps) => {
+export const Asker = ({ questions }: IAnswererProps) => {
   const [question, setQuestion] = useState("");
 
   const handleCreateQuestion = () => {
     const resp = {
-      session: socket.id,
+      session: questions_ws.id,
       question: question,
     };
-    if (question) socket.emit("create_question", resp);
+    if (question) questions_ws.emit("create_question", resp);
   };
+  const question_components = questions
+    .filter((q) => q.session_id === questions_ws.id)
+    .map((question) => (
+      <div className="answer__container" key={question.id}>
+        <span>{question.question_text}</span>
+        <div className="button_block">
+          <button className="answer__button">Submit answer</button>
+          <div>
+            <span>{new Date(question.created_at).toLocaleTimeString()}</span>
+          </div>
+        </div>
+      </div>
+    ));
 
   return (
     // <div className="answer position-absolute top-50 start-50 translate-middle shadow-sm p-3 mb-5 bg-body rounded">
@@ -43,7 +58,7 @@ export const Asker = ({ socket }: IAnswererProps) => {
           </button>
         </div>
       </form>
-
+      <div className="answer">{question_components}</div>
       {/* <span>Total number of replies: {questions.length}</span> */}
     </div>
   );

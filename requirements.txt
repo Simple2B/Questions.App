@@ -3,7 +3,6 @@ email-validator
 Flask
 Flask-Cors
 Flask-Login
-Flask-RESTful
 Flask-SocketIO
 Flask-SQLAlchemy
 Flask-WTF

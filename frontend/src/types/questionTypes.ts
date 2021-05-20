@@ -3,4 +3,5 @@ export interface IQuestion {
   header: string;
   question_text: string;
   created_at: number;
+  session_id: string;
 }

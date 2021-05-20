@@ -1,15 +1,14 @@
 import os
 
-
-from flask import Flask, Blueprint, render_template, scaffold, helpers
+from flask import Flask, render_template  # , scaffold, helpers
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_cors import CORS
 from werkzeug.exceptions import HTTPException
-from flask_restful import Api
 
+# from flask_restful import Api
 
-helpers._endpoint_from_view_func = scaffold._endpoint_from_view_func
+# helpers._endpoint_from_view_func = scaffold._endpoint_from_view_func
 
 # instantiate extensions
 login_manager = LoginManager()
@@ -19,13 +18,7 @@ db = SQLAlchemy()
 def create_app(environment="development"):
 
     from config import config
-    from app.views import (
-        main_blueprint,
-        auth_blueprint,
-        QuestionsApi,
-        QuestionApi,
-        UserQuestionApi,
-    )
+    from app.views import main_blueprint, auth_blueprint
     from app.models import (
         User,
         AnonymousUser,
@@ -33,8 +26,8 @@ def create_app(environment="development"):
 
     # Instantiate app.
     app = Flask(__name__)
-    api_blueprint = Blueprint("api", __name__, url_prefix="/api/v1")
-    api = Api(api_blueprint)
+    # api_blueprint = Blueprint("api", __name__, url_prefix="/api/v1")
+    # api = Api(api_blueprint)
     CORS(app)
 
     # Set app config.
@@ -47,14 +40,14 @@ def create_app(environment="development"):
     login_manager.init_app(app)
 
     # Add API resources.
-    api.add_resource(QuestionsApi, "/questions")
-    api.add_resource(QuestionApi, "/questions/<int:question_id>")
-    api.add_resource(UserQuestionApi, "/users/<int:user_id>/questions")
+    # api.add_resource(QuestionsApi, "/questions")
+    # api.add_resource(QuestionApi, "/questions/<int:question_id>")
+    # api.add_resource(UserQuestionApi, "/users/<int:user_id>/questions")
 
     # Register blueprints.
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(main_blueprint)
-    app.register_blueprint(api_blueprint)
+    # app.register_blueprint(api_blueprint)
 
     # Set up flask login.
     @login_manager.user_loader
