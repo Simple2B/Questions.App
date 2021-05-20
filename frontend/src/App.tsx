@@ -31,36 +31,25 @@ export const App = () => {
       socket.emit("get_active_questions");
       console.log(resp);
     });
-    // return () => {
-
-    //   console.log("before ");
-    //   alert("componentWillUnmount");
-    //   const client_data = {
-    //     session: socket.id,
-    //     message: "disconnected successfully",
-    //   };
-    //   socket.emit("leave_service", client_data);
-    //   socket.disconnect();
-    //   alert("componentWillUnmount");
-    // };
-    // return () => {
-    //   window.removeEventListener("beforeunload", alertUser);
-    // };
+    return () => {
+      // const client_data = {
+      //   session: socket.id,
+      //   message: "disconnected successfully",
+      // };
+      // socket.emit("leave_service", client_data);
+      // socket.disconnect();
+    };
   }, []);
 
-  // useBeforeunload((event) => {
-  //   if (socket) event.preventDefault();
-  // });
   useBeforeunload((event) => {
     event.preventDefault();
-  });
-
-  useEffect(() => {
-    window.onbeforeunload = function () {
-      return false;
+    const client_data = {
+      session: socket.id,
+      message: "disconnected successfully",
     };
-    return () => {};
-  }, []);
+    socket.emit("leave_service", client_data);
+    socket.disconnect();
+  });
 
   return (
     <div>
