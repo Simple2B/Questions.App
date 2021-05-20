@@ -29,10 +29,8 @@ export const App = () => {
 
     socket.on("success_active_questions", (resp) => {
       if (resp.status === "success") {
-        const tmpData = resp.data;
-        setActiveQuestions(tmpData);
+        setActiveQuestions(resp.data);
       }
-      console.log(resp);
     });
 
     socket.on("question_create_success", (resp) => {
@@ -44,13 +42,17 @@ export const App = () => {
   }, []);
 
   useBeforeunload((event) => {
-    event.preventDefault();
+    console.log(socket);
+
     const client_data = {
       session: socket.id,
       message: "disconnected successfully",
     };
+    console.log(client_data);
+
     socket.emit("leave_service", client_data);
-    socket.disconnect();
+    // socket.disconnect();
+    event.preventDefault();
   });
 
   const handlePage = () => {
@@ -59,14 +61,14 @@ export const App = () => {
 
   return (
     <>
+      <button onClick={handlePage}>Change Page</button>
       <div>
         {page ? (
-          <Asker socket={socket} />
+          <Asker questions={activeQuestions} />
         ) : (
           <Answerer questions={activeQuestions} />
         )}
       </div>
-      <button onClick={handlePage}>Change Page</button>
     </>
   );
 };
