@@ -22,11 +22,11 @@ def client():
 
 
 def test_auth_pages(client):
-    response = client.get("/register")
+    response = client.get("/auth/register")
     assert response.status_code == 200
-    response = client.get("/login")
+    response = client.get("/auth/login")
     assert response.status_code == 200
-    response = client.get("/logout")
+    response = client.get("/auth/logout")
     assert response.status_code == 302
 
 
@@ -34,7 +34,7 @@ def test_register(client):
     users = User.query.all()
     user_num_before = len(users)
     response = client.post(
-        "/register",
+        "/auth/register",
         data=dict(
             username="sam",
             email="sam@test.com",

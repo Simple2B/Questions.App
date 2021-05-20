@@ -6,9 +6,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_cors import CORS
 from werkzeug.exceptions import HTTPException
+from flask_restful import Api
+
 
 helpers._endpoint_from_view_func = scaffold._endpoint_from_view_func
-from flask_restful import Api
 
 # instantiate extensions
 login_manager = LoginManager()
