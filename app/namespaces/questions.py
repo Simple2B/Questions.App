@@ -12,7 +12,6 @@ class QuestionsNamespace(Namespace):
         questions = Question.query.filter_by(session_id=request.sid).all()
         for q in questions:
             q.delete()
-        resp = {"status": "success", "message": "User disconnect"}
         print(questions)
         print("someone disconnected")
         print((request.sid))
