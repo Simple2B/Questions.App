@@ -1,13 +1,21 @@
 from flask_socketio import Namespace, emit
+from flask import request
 from app.models import Question, User
 
 
 class QuestionsNamespace(Namespace):
     def on_connect(self):
         print("someone connected")
+        print(request.sid)
 
     def on_disconnect(self):
+        questions = Question.query.filter_by(session_id=request.sid).all()
+        for q in questions:
+            q.delete()
+        resp = {"status": "success", "message": "User disconnect"}
+        print(questions)
         print("someone disconnected")
+        print((request.sid))
 
     def on_get_active_questions(self):
         questions = [q.to_json() for q in Question.query.all() if q.is_active is True]

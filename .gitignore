@@ -8,3 +8,5 @@ env/
 .env
 *.pyc
 /*.sqlite3
+
+test.html
