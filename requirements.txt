@@ -7,6 +7,7 @@ Flask-RESTful
 Flask-SocketIO
 Flask-SQLAlchemy
 Flask-WTF
+python-dotenv
 # Jinja2
 # WTForms
 
