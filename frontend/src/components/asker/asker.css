@@ -1,0 +1,18 @@
+.filter {
+  display: flex;
+  justify-content: space-between;
+  font-size: 20px;
+}
+
+.form-select {
+  width: 200px;
+  height: 35px;
+}
+
+.btn_start {
+  margin: 10px 0 20px 440px;
+}
+
+.answer_amount {
+  font-size: 20px;
+}
