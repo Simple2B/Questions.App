@@ -2,21 +2,42 @@ from flask_socketio import Namespace, emit
 from flask import request
 from app.models import Question, User
 
+clients = 0
+
 
 class QuestionsNamespace(Namespace):
     def on_connect(self):
+        global clients
+        clients = clients + 1
         print("someone connected")
         print(request.sid)
+        print(f"Total clients: {clients}")
 
     def on_disconnect(self):
         questions = Question.query.filter_by(session_id=request.sid).all()
         for q in questions:
-            q.delete()
+            q.is_active = False
+            q.save()
+        global clients
+        clients = clients - 1
         print(questions)
         print("someone disconnected")
         print((request.sid))
+        print(f"Total clients: {clients}")
 
     def on_get_active_questions(self):
+        questions = [q.to_json() for q in Question.query.all() if q.is_active is True]
+        if not questions:
+            resp = {"status": "success", "message": "No active questions!"}
+            emit("no_active_questions", resp)
+        resp = {
+            "status": "success",
+            "message": "There are active questions!",
+            "data": questions,
+        }
+        emit("success_active_questions", resp, broadcast=True)
+
+    def on_get_all_questions(self):
         questions = [q.to_json() for q in Question.query.all() if q.is_active is True]
         if not questions:
             resp = {"status": "success", "message": "No active questions!"}
