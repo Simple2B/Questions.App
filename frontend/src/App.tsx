@@ -6,13 +6,6 @@ import { Asker } from "./components/asker/Asker";
 import { Answerer } from "./components/answerer/Answerer";
 import "./app.css";
 
-const questionsFromServer = [
-  { id: 1, header: "Header 1", question: "rem ipsum dolor sit amet", time: 15 },
-  { id: 2, header: "Header 2", question: "rem ipsum dolor sit amet", time: 15 },
-  { id: 3, header: "Header 3", question: "rem ipsum dolor sit amet", time: 15 },
-  { id: 4, header: "Header 4", question: "rem ipsum dolor sit amet", time: 15 },
-];
-
 export const App = () => {
   const [socket, setSocket] = useState<Socket>(questions_ws);
   const [page, setPage] = useState(true);
@@ -62,13 +55,7 @@ export const App = () => {
   return (
     <>
       <button onClick={handlePage}>Change Page</button>
-      <div>
-        {page ? (
-          <Asker questions={activeQuestions} />
-        ) : (
-          <Answerer questions={activeQuestions} />
-        )}
-      </div>
+      <div>{page ? <Asker questions={activeQuestions} /> : <Answerer />}</div>
     </>
   );
 };
