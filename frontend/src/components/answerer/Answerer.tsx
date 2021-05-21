@@ -6,18 +6,25 @@ import { questions_ws, answers_ws } from "../../socket";
 
 export const Answerer = () => {
   const [formIsActive, setFormIsActive] = useState(false);
-  const [activeQuestions, setActiveQuestions] = useState([]);
+  const [activeQuestions, setActiveQuestions] = useState<IQuestion[]>([]);
 
   useEffect(() => {
-    answers_ws.connect();
-
     answers_ws.on("connect", () => {
       answers_ws.send(`User ${answers_ws.id} has connected`);
+    });
+
+    questions_ws.on("create_question_success", () => {
+      questions_ws.emit("get_active_questions");
+    });
+
+    questions_ws.on("asker_leave", () => {
+      questions_ws.emit("get_active_questions");
     });
 
     questions_ws.on("success_active_questions", (resp) => {
       if (resp.status === "success") {
         setActiveQuestions(resp.data);
+        console.log(resp.data);
       }
     });
 
@@ -27,9 +34,7 @@ export const Answerer = () => {
     });
 
     questions_ws.emit("get_active_questions");
-    return () => {
-      answers_ws.disconnect();
-    };
+    return () => {};
   }, []);
 
   const question_components = activeQuestions.map((question) => (
@@ -42,7 +47,9 @@ export const Answerer = () => {
       <div className="answer__header">
         <div className="answer_header-row">
           <div className="answer__window-title">Answerer window</div>
-          <div className="answer__username">Current answerer</div>
+          <div className="answer__username">
+            {questions_ws.id} \ {answers_ws.id}
+          </div>
         </div>
         <div className="answer_header-row">
           <div className="answer__question-count">

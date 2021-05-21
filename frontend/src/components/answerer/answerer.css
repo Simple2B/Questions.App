@@ -85,9 +85,15 @@
 }
 .item-group__header {
   display: flex;
+  flex-direction: column;
+}
+.item-group__header-top {
+  display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 4px;
+}
+.item-group__header-bottom {
 }
 .item-group__title {
   font-size: 1.3em;
