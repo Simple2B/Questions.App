@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { IQuestion } from "../../types/questionTypes";
 import { IAnswer } from "../../types/answerTypes";
-import { answers_ws, questions_ws } from "../../socket";
+import { questions_ws } from "../../socket";
 import moment from "moment";
 
 interface IAnswerFormProps {
@@ -24,8 +24,9 @@ export const AnswererForm: React.FC<IAnswerFormProps> = ({ question }) => {
       const answer: IAnswer = {
         question_id: question.id,
         answer_text: answerText,
+        answerer_id: 3,
       };
-      answers_ws.emit("add_answer", answer);
+      questions_ws.emit("add_answer", answer);
       setAnswerText("");
     } else {
       alert("Answer can not be empty!");
@@ -33,7 +34,7 @@ export const AnswererForm: React.FC<IAnswerFormProps> = ({ question }) => {
   };
 
   useEffect(() => {
-    answers_ws.on("answer_created", () => {
+    questions_ws.on("answer_created", () => {
       questions_ws.emit("get_active_questions");
     });
   }, []);

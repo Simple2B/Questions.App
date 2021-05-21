@@ -20,7 +20,7 @@ export const App = () => {
   return (
     <>
       <button onClick={handlePage}>Change Page</button>
-      <div>{page ? <Asker /> : <Answerer />}</div>
+      {page ? <Asker /> : <Answerer />}
     </>
   );
 };

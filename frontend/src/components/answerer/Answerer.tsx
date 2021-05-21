@@ -9,8 +9,8 @@ export const Answerer = () => {
   const [activeQuestions, setActiveQuestions] = useState<IQuestion[]>([]);
 
   useEffect(() => {
-    answers_ws.on("connect", () => {
-      answers_ws.send(`User ${answers_ws.id} has connected`);
+    questions_ws.on("connect", () => {
+      questions_ws.send(`User ${questions_ws.id} has connected`);
     });
 
     questions_ws.on("create_question_success", () => {
@@ -47,9 +47,7 @@ export const Answerer = () => {
       <div className="answer__header">
         <div className="answer_header-row">
           <div className="answer__window-title">Answerer window</div>
-          <div className="answer__username">
-            {questions_ws.id} \ {answers_ws.id}
-          </div>
+          <div className="answer__username">{questions_ws.id}</div>
         </div>
         <div className="answer_header-row">
           <div className="answer__question-count">

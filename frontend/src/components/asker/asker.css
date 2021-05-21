@@ -1,37 +1,97 @@
-.filter {
+.ask_block {
+  max-width: 800px;
+  background-color: rgb(255, 249, 239);
+  margin: 0 auto;
+  border-radius: 3px;
+}
+
+.ask_form {
+  display: flex;
+  justify-content: center;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  margin: 20px;
+}
+
+.input {
+  width: 100%;
+  height: 40px;
+  border: 1px solid rgb(245, 238, 238);
+  border-radius: 5px 0 0 5px;
+  padding-left: 15px;
+}
+
+.ask_button {
+  border: 1px solid rgb(245, 238, 238);
+  border-radius: 0 5px 5px 0;
+  width: 80px;
+  background-color: rgb(108, 133, 87);
+  color: rgb(245, 238, 238);
+  transition: background-color 2s;
+  cursor: pointer;
+  margin: 0;
+}
+
+.ask_button:hover {
+  background-color: rgb(59, 73, 47);
+}
+
+.asker_question {
   display: flex;
   justify-content: space-between;
-  font-size: 20px;
+  align-items: center;
+  /* margin: 15px; */
+  padding: 0 15px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid rgb(228, 221, 221);
+  cursor: pointer;
 }
 
-.form-select {
-  width: 200px;
-  height: 35px;
+.asker_question-id {
+  display: inline;
 }
 
-.btn_start {
-  margin: 10px 0 20px 440px;
+.asker_question-header {
+  display: inline;
+  font-weight: bold;
 }
 
-.answer_amount {
-  font-size: 20px;
+.ask_select {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+  border-bottom: 1px solid rgb(245, 238, 238);
+  border-top: 1px solid rgb(245, 238, 238);
+  padding: 20px;
 }
-.asker {
+
+.ask_filter {
+  border: 1px solid rgb(218, 209, 209);
+  border-radius: 0 5px 5px 0;
+  width: 150px;
+  height: 30px;
+}
+
+.asker_questions {
+  /* margin: 30px 50px; */
+  padding-bottom: 15px;
+}
+
+.answers_info {
+  border-bottom: 1px solid rgb(245, 238, 238);
+  padding: 15px;
+}
+
+.answers_author {
+  font-weight: bold;
+}
+.asker__answers {
+  display: none;
+}
+.asker__answers_active {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.asker__form {
-  max-width: 400px;
-  min-width: 310px;
-  margin: 0 auto;
-  padding-top: 150px;
-}
-@media screen and (max-width: 576px) {
-  .asker__form {
-    width: 100%;
-    padding: 5px;
-    margin: 0;
-  }
 }

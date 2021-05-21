@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import moment from "moment";
 import { questions_ws } from "../../socket";
-import "./asker.css";
 import { IQuestion } from "../../types/questionTypes";
+import { IAnswer } from "../../types/answerTypes";
+import "./asker.css";
+import { AskerQuestion } from "./AskerQuestion";
 
 interface IResponse {
   status: string;
@@ -12,7 +15,8 @@ export const Asker = () => {
   const [question, setQuestion] = useState("");
   const [activeQuestions, setActiveQuestions] = useState<IQuestion[]>([]);
 
-  const handleCreateQuestion = () => {
+  const handleCreateQuestion = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const resp = {
       session: questions_ws.id,
       question: question,
@@ -20,21 +24,9 @@ export const Asker = () => {
     if (question) questions_ws.emit("create_question", resp);
   };
 
-  const question_components = activeQuestions
-    .filter((q) => q.session_id === questions_ws.id)
-    .map((activeQuestions) => (
-      <div className="answer__container" key={activeQuestions.id}>
-        <span>{activeQuestions.question_text}</span>
-        <div className="button_block">
-          <button className="answer__button">Submit answer</button>
-          <div>
-            <span>
-              {new Date(activeQuestions.created_at).toLocaleTimeString()}
-            </span>
-          </div>
-        </div>
-      </div>
-    ));
+  const question_components = activeQuestions.map((question) => (
+    <AskerQuestion question={question} />
+  ));
 
   useEffect(() => {
     questions_ws.on("create_question_success", (resp) => {
@@ -49,39 +41,36 @@ export const Asker = () => {
         setActiveQuestions(resp.data);
       }
     });
-
-    return () => {};
+    questions_ws.on("answer_created", () => {
+      questions_ws.emit("get_questions_by_session_id");
+    });
   }, []);
 
   return (
-    // <div className="answer position-absolute top-50 start-50 translate-middle shadow-sm p-3 mb-5 bg-body rounded">
-    <div className="asker">
-      <form className="asker__form">
-        <p>{questions_ws.id}</p>
-        <div className="input-group mb-3">
+    <div className="ask_block">
+      <div className="ask_form">
+        {/* <p>{questions_ws.id}</p> */}
+        <form className="form" onSubmit={(e) => handleCreateQuestion(e)}>
           <input
-            type="text"
-            className="form-control"
-            placeholder="Ask your question"
-            aria-label="Ask your question"
-            aria-describedby="button-addon2"
+            className="input"
             value={question}
             onChange={(e) => {
               setQuestion(e.target.value);
             }}
           />
-          <button
-            className="btn btn-success"
-            type="button"
-            id="button-addon2"
-            onClick={handleCreateQuestion}
-          >
-            Ask
-          </button>
-        </div>
-      </form>
-      <div className="answer">{question_components}</div>
-      {/* <span>Total number of replies: {questions.length}</span> */}
+          <button className="ask_button">Ask</button>
+        </form>
+      </div>
+      <div className="ask_select">
+        <select className="ask_filter">
+          <option>Filter</option>
+          <option>1</option>
+          <option>1</option>
+          <option>1</option>
+        </select>
+        <span>Total number of questions: {activeQuestions.length}</span>
+      </div>
+      <div className="asker_questions">{question_components}</div>
     </div>
   );
 };
