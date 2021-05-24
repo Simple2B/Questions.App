@@ -1,6 +1,7 @@
 from flask_socketio import Namespace, emit
 from flask import request
 from app.models import Question, User, Answer
+from app.logger import log
 
 asker_clients = 0
 
@@ -9,8 +10,8 @@ class QuestionsNamespace(Namespace):
     def on_connect(self):
         global asker_clients
         asker_clients = asker_clients + 1
-        print("CONNECTED")
-        print(f"SID: {request.sid}")
+        log(log.INFO, "CONNECTED")
+        log(log.INFO, "SID: [%s]", request.sid)
         print(f"ASKER total: {asker_clients}")
 
     def on_disconnect(self):
