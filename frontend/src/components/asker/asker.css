@@ -55,12 +55,13 @@
 }
 
 .asker_question-header {
-  display: inline;
+  display: flex;
   font-weight: bold;
 }
 
 .ask_select {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   margin: 20px;
   border-bottom: 1px solid rgb(245, 238, 238);

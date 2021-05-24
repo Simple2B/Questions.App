@@ -5,6 +5,7 @@ import { IQuestion } from "../../types/questionTypes";
 import { IAnswer } from "../../types/answerTypes";
 import "./asker.css";
 import { AskerQuestion } from "./AskerQuestion";
+import { ClientEvents, ServerEvents } from "../../types/socketTypes";
 
 interface IResponse {
   status: string;
@@ -29,21 +30,27 @@ export const Asker = () => {
   ));
 
   useEffect(() => {
-    questions_ws.on("create_question_success", (resp) => {
-      questions_ws.emit("get_questions_by_session_id");
+    questions_ws.on(ServerEvents.create_question_success, (resp) => {
+      questions_ws.emit(ClientEvents.get_questions_by_session_id);
     });
 
-    questions_ws.on("no_active_questions", (resp) => {
+    questions_ws.on(ServerEvents.no_active_questions, (resp) => {
       setActiveQuestions([]);
     });
-    questions_ws.on("success_get_questions_by_session_id", (resp) => {
-      if (resp.status === "success") {
-        setActiveQuestions(resp.data);
+    questions_ws.on(
+      ServerEvents.success_get_questions_by_session_id,
+      (resp) => {
+        if (resp.status === "success") {
+          setActiveQuestions(resp.data);
+        }
       }
+    );
+    questions_ws.on(ServerEvents.answer_created, () => {
+      questions_ws.emit(ClientEvents.get_questions_by_session_id);
     });
-    questions_ws.on("answer_created", () => {
-      questions_ws.emit("get_questions_by_session_id");
-    });
+    return () => {
+      // client.dropConnection();
+    };
   }, []);
 
   return (
@@ -62,15 +69,10 @@ export const Asker = () => {
         </form>
       </div>
       <div className="ask_select">
-        <select className="ask_filter">
-          <option>Filter</option>
-          <option>1</option>
-          <option>1</option>
-          <option>1</option>
-        </select>
-        <span>Total number of questions: {activeQuestions.length}</span>
+        <div>Total questions: {activeQuestions.length}</div>
+        <div>Total answers: {activeQuestions.length}</div>
       </div>
-      <div className="asker_questions">{question_components}</div>
+      {question_components}
     </div>
   );
 };

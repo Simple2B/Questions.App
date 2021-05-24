@@ -29,7 +29,7 @@ export const AnswererForm: React.FC<IAnswerFormProps> = ({ question }) => {
       questions_ws.emit("add_answer", answer);
       setAnswerText("");
     } else {
-      alert("Answer can not be empty!");
+      alert("Answer can not be empty or shorter than 3 letters!");
     }
   };
 

@@ -1,0 +1,22 @@
+.header {
+  padding: 9px 10px;
+  background-color: rgb(90, 136, 88);
+}
+.header__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header__left {
+  color: white;
+  font-weight: 600;
+  font-size: 2rem;
+}
+.header__right {
+  display: flex;
+}
+.header__link {
+  text-decoration: none;
+  color: white;
+  padding-right: 15px;
+}

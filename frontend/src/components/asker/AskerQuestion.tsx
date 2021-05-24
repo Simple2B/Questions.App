@@ -21,7 +21,7 @@ export const AskerQuestion: React.FC<IAskerQuestionProps> = ({ question }) => {
   });
 
   return (
-    <>
+    <div className="asker_questions">
       <div
         className="asker_question"
         onClick={() => {
@@ -32,6 +32,6 @@ export const AskerQuestion: React.FC<IAskerQuestionProps> = ({ question }) => {
         <p className="asker_question-amount">{question.answers_list.length}</p>
       </div>
       <div className={styles}>{answerComponents}</div>
-    </>
+    </div>
   );
 };
