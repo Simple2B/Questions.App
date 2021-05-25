@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
-  background-color: rgb(233, 233, 223);
+  background-color: #f8f1e3;
 }

@@ -3,6 +3,7 @@
   background-color: rgb(255, 249, 239);
   margin: 0 auto;
   border-radius: 3px;
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
 }
 
 .ask_form {
@@ -30,6 +31,7 @@
   width: 80px;
   background-color: rgb(108, 133, 87);
   color: rgb(245, 238, 238);
+  font-weight: bold;
   transition: background-color 2s;
   cursor: pointer;
   margin: 0;
